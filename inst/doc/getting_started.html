@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Getting Started with CytoProfile</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Getting Started with CytoProfile</h1>
+
+
+
+<div id="cytoprofile" class="section level1">
+<h1>CytoProfile</h1>
+<p>The goal of CytoProfile is to conduct quality control using
+biological meaningful cutoff on raw measured values of cytokines.
+Specifically, test on distributional symmetry to suggest the adopt of
+transformation. Conduct exploratory analysis including summary
+statistics, generate enriched barplots, and boxplots. Further, conduct
+univariate analysis and multivariate analysis for advance analysis.</p>
+<div id="installation" class="section level2">
+<h2>Installation</h2>
+<p>Before installation of the CytoProfile package, make sure to install
+BiocManager and mix0mics packages using:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="do">## install BiocManager</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">&quot;BiocManager&quot;</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) <span class="fu">install.packages</span>(<span class="st">&quot;BiocManager&quot;</span>) </span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="do">## install mixOmics </span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">&#39;mixOmics&#39;</span>)</span></code></pre></div>
+<p>You can install the development version of CytoProfile from <a href="https://github.com/saraswatsh/CytoProfile">GitHub</a> with:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># install.packages(&quot;devtools&quot;)</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;saraswatsh/CytoProfile&quot;</span>)</span></code></pre></div>
+<p>Install CytoProfile from CRAN with:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;CytoProfile&quot;</span>)</span></code></pre></div>
+</div>
+<div id="example" class="section level2">
+<h2>Example</h2>
+<p>Below are examples of using the functions provided in CytoProfile.
+Any saved or generated files that are PDF or PNG format will be found at
+in the <a href="https://github.com/saraswatsh/CytoProfile/tree/main/output">Output
+Folder</a>.</p>
+</div>
+<div id="data-loading-and-set-up" class="section level2">
+<h2>1. Data Loading and set up</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># Loading all packages required</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co"># Data manipulation and reshaping</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">library</span>(dplyr)       <span class="co"># For data filtering, grouping, and summarising.</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="fu">library</span>(tidyr)       <span class="co"># For reshaping data (e.g., pivot_longer, pivot_wider).</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co"># Plotting and visualization</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="fu">library</span>(ggplot2)     <span class="co"># For creating all the ggplot-based visualizations.</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="fu">library</span>(gridExtra)   <span class="co"># For arranging multiple plots on a single page.</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="fu">library</span>(ggrepel)     <span class="co"># For improved label placement in plots (e.g., volcano plots).</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="fu">library</span>(gplots)      <span class="co"># For heatmap.2, which is used to generate heatmaps.</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="fu">library</span>(plot3D)      <span class="co"># For creating 3D scatter plots in PCA and sPLS-DA analyses.</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="fu">library</span>(reshape2)    <span class="co"># For data transformation (e.g., melt) in cross-validation plots.</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co"># Statistical analysis</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="fu">library</span>(mixOmics)    <span class="co"># For multivariate analyses (PCA, sPLS-DA, etc.).</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="fu">library</span>(e1071)     <span class="co"># For computing skewness and kurtosis.</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="fu">library</span>(pROC)        <span class="co"># For ROC curve generation in machine learning model evaluation.</span></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co"># Machine learning</span></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="fu">library</span>(xgboost)     <span class="co"># For building XGBoost classification models.</span></span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a><span class="fu">library</span>(randomForest) <span class="co"># For building Random Forest classification models.</span></span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a><span class="fu">library</span>(caret)       <span class="co"># For cross-validation and other machine learning utilities.</span></span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a><span class="co"># Package development and document rendering</span></span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a><span class="fu">library</span>(knitr)       <span class="co"># For knitting RMarkdown files and setting chunk options.</span></span>
+<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a><span class="fu">library</span>(devtools)    <span class="co"># For installing the development version of the package from GitHub.</span></span>
+<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a></span>
+<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a><span class="co"># Load in the CytoProfile package</span></span>
+<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a><span class="fu">library</span>(CytoProfile)</span>
+<span id="cb4-30"><a href="#cb4-30" tabindex="-1"></a></span>
+<span id="cb4-31"><a href="#cb4-31" tabindex="-1"></a><span class="co"># Loading in data</span></span>
+<span id="cb4-32"><a href="#cb4-32" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;ExampleData1&quot;</span>)</span>
+<span id="cb4-33"><a href="#cb4-33" tabindex="-1"></a>data_df <span class="ot">&lt;-</span> ExampleData1</span>
+<span id="cb4-34"><a href="#cb4-34" tabindex="-1"></a></span>
+<span id="cb4-35"><a href="#cb4-35" tabindex="-1"></a><span class="co"># Creating a temporary directory to store output files</span></span>
+<span id="cb4-36"><a href="#cb4-36" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">tempdir</span>(<span class="at">check =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+</div>
+<div id="exploratory-data-analysis" class="section level2">
+<h2>2. Exploratory Data Analysis</h2>
+<div id="boxplots" class="section level3">
+<h3>Boxplots</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># Generating boxplots to check for outliers for raw values</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">cyt_bp</span>(data_df[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)], </span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>        <span class="at">pdf_title =</span> <span class="fu">file.path</span>(path, <span class="st">&quot;boxplot_by_cytokine_raw.pdf&quot;</span>))  </span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co"># Removing the first 3 columns to retain only continuous variables.</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co"># Generating boxplots to check for outliers for log2 values</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="fu">cyt_bp</span>(data_df[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)], </span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>       <span class="at">pdf_title =</span> <span class="fu">file.path</span>(path, <span class="st">&quot;boxplot_by_cytokine_log2.pdf&quot;</span>),</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>       <span class="at">scale =</span> <span class="st">&quot;log2&quot;</span>)  </span></code></pre></div>
+</div>
+<div id="group-specific-boxplots" class="section level3">
+<h3>Group-Specific Boxplots</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># Raw values for group-specific boxplots</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">cyt_bp2</span>(data_df[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">3</span>)], </span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>        <span class="at">pdf_title =</span> <span class="fu">file.path</span>(path, <span class="st">&quot;boxplot_by_group_and_treatment_raw.pdf&quot;</span>), </span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>        <span class="at">scale =</span> <span class="cn">NULL</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co"># Log2-transformed group-specific boxplots</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="fu">cyt_bp2</span>(data_df[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">3</span>)], </span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>        <span class="at">pdf_title =</span> <span class="fu">file.path</span>(path, <span class="st">&quot;boxplot_by_group_and_treatment_log2.pdf&quot;</span>), </span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>        <span class="at">scale =</span> <span class="st">&quot;log2&quot;</span>)</span></code></pre></div>
+</div>
+</div>
+<div id="skewness-and-kurtosis" class="section level2">
+<h2>3. Skewness and Kurtosis</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Histogram for overall raw data</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">cyt_skku</span>(data_df[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)], </span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>         <span class="at">pdf_title =</span> <span class="fu">file.path</span>(path, <span class="st">&quot;skew_and_kurtosis.pdf&quot;</span>), </span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>         <span class="at">group_cols =</span> <span class="cn">NULL</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co"># Histogram with grouping (e.g., &quot;Group&quot;)</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="fu">cyt_skku</span>(ExampleData1[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>)], </span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>         <span class="at">pdf_title =</span> <span class="fu">file.path</span>(path, <span class="st">&quot;skew_and_kurtosis_2.pdf&quot;</span>), </span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>         <span class="at">group_cols =</span> <span class="fu">c</span>(<span class="st">&quot;Group&quot;</span>))</span></code></pre></div>
+</div>
+<div id="error-bar-plots" class="section level2">
+<h2>4. Error Bar Plots</h2>
+<div id="basic-error-bar-plot" class="section level3">
+<h3>Basic Error Bar Plot</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>cytokine_mat <span class="ot">&lt;-</span> ExampleData1[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)]</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>cytokineNames <span class="ot">&lt;-</span> <span class="fu">colnames</span>(cytokine_mat)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>nCytokine <span class="ot">&lt;-</span> <span class="fu">length</span>(cytokineNames)</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">cyt_skku</span>(ExampleData1[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">3</span>)], <span class="at">print_res_log =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>                    <span class="at">group_cols =</span> <span class="fu">c</span>(<span class="st">&quot;Group&quot;</span>, <span class="st">&quot;Treatment&quot;</span>))</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="fu">pdf</span>(<span class="at">file =</span> <span class="fu">file.path</span>(path, <span class="st">&quot;bar_error_plot.pdf&quot;</span>))</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>oldpar <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">no.readonly =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>), <span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">1</span>))</span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nCytokine) {</span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>  center_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">name =</span> <span class="fu">rownames</span>(results[,,k]), results[,,k])</span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>  <span class="fu">cyt_errbp</span>(center_df,</span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>            <span class="at">p_lab =</span> <span class="cn">FALSE</span>, <span class="at">es_lab =</span> <span class="cn">FALSE</span>, <span class="at">class_symbol =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>            <span class="at">y_lab =</span> <span class="st">&quot;Concentration in log2 scale&quot;</span>, <span class="at">main =</span> cytokineNames[k])</span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a>}</span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a><span class="fu">par</span>(oldpar)</span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">dev.cur</span>() <span class="sc">&gt;</span> <span class="dv">1</span>) <span class="fu">dev.off</span>()</span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a><span class="co">#&gt; png </span></span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a><span class="co">#&gt;   2</span></span></code></pre></div>
+</div>
+<div id="enriched-error-bar-plot-with-p-values-and-effect-sizes" class="section level3">
+<h3>Enriched Error Bar Plot with p-values and Effect Sizes</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>data_df <span class="ot">&lt;-</span> ExampleData1[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">3</span>)]</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>cyt_mat <span class="ot">&lt;-</span> <span class="fu">log2</span>(data_df[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)])</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>data_df1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(data_df[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], cyt_mat)</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>cytokineNames <span class="ot">&lt;-</span> <span class="fu">colnames</span>(cyt_mat)</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>nCytokine <span class="ot">&lt;-</span> <span class="fu">length</span>(cytokineNames)</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>condt <span class="ot">&lt;-</span> <span class="sc">!</span><span class="fu">is.na</span>(cyt_mat) <span class="sc">&amp;</span> (cyt_mat <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>Cutoff <span class="ot">&lt;-</span> <span class="fu">min</span>(cyt_mat[condt], <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">/</span> <span class="dv">10</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>p_aov_mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow =</span> nCytokine, <span class="at">ncol =</span> <span class="dv">3</span>)</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="fu">dimnames</span>(p_aov_mat) <span class="ot">&lt;-</span> <span class="fu">list</span>(cytokineNames, <span class="fu">c</span>(<span class="st">&quot;Group&quot;</span>, <span class="st">&quot;Treatment&quot;</span>, <span class="st">&quot;Interaction&quot;</span>))</span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>p_groupComp_mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow =</span> nCytokine, <span class="at">ncol =</span> <span class="dv">3</span>)</span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="fu">dimnames</span>(p_groupComp_mat) <span class="ot">&lt;-</span> <span class="fu">list</span>(cytokineNames, <span class="fu">c</span>(<span class="st">&quot;2-1&quot;</span>, <span class="st">&quot;3-1&quot;</span>, <span class="st">&quot;3-2&quot;</span>))</span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>ssmd_groupComp_stm_mat <span class="ot">&lt;-</span> mD_groupComp_stm_mat <span class="ot">&lt;-</span> p_groupComp_stm_mat <span class="ot">&lt;-</span> p_groupComp_mat</span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nCytokine) {</span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a>  Cytokine <span class="ot">&lt;-</span> (cyt_mat[, i] <span class="sc">+</span> Cutoff)</span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a>  cytokine_aov <span class="ot">&lt;-</span> <span class="fu">aov</span>(Cytokine <span class="sc">~</span> Group <span class="sc">*</span> Treatment, <span class="at">data =</span> data_df)</span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a>  aov_table <span class="ot">&lt;-</span> <span class="fu">summary</span>(cytokine_aov)[[<span class="dv">1</span>]]</span>
+<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a>  p_aov_mat[i, ] <span class="ot">&lt;-</span> aov_table[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">5</span>]</span>
+<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a>  p_groupComp_mat[i, ] <span class="ot">&lt;-</span> <span class="fu">TukeyHSD</span>(cytokine_aov)<span class="sc">$</span>Group[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">4</span>]</span>
+<span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a>  p_groupComp_stm_mat[i, ] <span class="ot">&lt;-</span> <span class="fu">TukeyHSD</span>(cytokine_aov)<span class="sc">$</span><span class="st">`</span><span class="at">Group:Treatment</span><span class="st">`</span>[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">4</span>]</span>
+<span id="cb9-22"><a href="#cb9-22" tabindex="-1"></a>  mD_groupComp_stm_mat[i, ] <span class="ot">&lt;-</span> <span class="fu">TukeyHSD</span>(cytokine_aov)<span class="sc">$</span><span class="st">`</span><span class="at">Group:Treatment</span><span class="st">`</span>[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">1</span>]</span>
+<span id="cb9-23"><a href="#cb9-23" tabindex="-1"></a>  ssmd_groupComp_stm_mat[i, ] <span class="ot">&lt;-</span> mD_groupComp_stm_mat[i, ] <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="dv">2</span> <span class="sc">*</span> aov_table[<span class="st">&quot;Residuals&quot;</span>, <span class="st">&quot;Mean Sq&quot;</span>])</span>
+<span id="cb9-24"><a href="#cb9-24" tabindex="-1"></a>}</span>
+<span id="cb9-25"><a href="#cb9-25" tabindex="-1"></a></span>
+<span id="cb9-26"><a href="#cb9-26" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">cyt_skku</span>(ExampleData1[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">3</span>)], <span class="at">print_res_log =</span> <span class="cn">TRUE</span>, <span class="at">group_cols =</span> <span class="fu">c</span>(<span class="st">&quot;Group&quot;</span>, <span class="st">&quot;Treatment&quot;</span>))</span>
+<span id="cb9-27"><a href="#cb9-27" tabindex="-1"></a></span>
+<span id="cb9-28"><a href="#cb9-28" tabindex="-1"></a><span class="fu">pdf</span>(<span class="at">file =</span> <span class="fu">file.path</span>(path, <span class="st">&quot;bar_error_plot_enriched.pdf&quot;</span>))</span>
+<span id="cb9-29"><a href="#cb9-29" tabindex="-1"></a></span>
+<span id="cb9-30"><a href="#cb9-30" tabindex="-1"></a>oldpar <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">no.readonly =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb9-31"><a href="#cb9-31" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>), <span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>))</span>
+<span id="cb9-32"><a href="#cb9-32" tabindex="-1"></a></span>
+<span id="cb9-33"><a href="#cb9-33" tabindex="-1"></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nCytokine) {</span>
+<span id="cb9-34"><a href="#cb9-34" tabindex="-1"></a>  result_mat <span class="ot">&lt;-</span> results[<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>, , k]</span>
+<span id="cb9-35"><a href="#cb9-35" tabindex="-1"></a>  center_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb9-36"><a href="#cb9-36" tabindex="-1"></a>    <span class="at">name =</span> <span class="fu">rownames</span>(result_mat),</span>
+<span id="cb9-37"><a href="#cb9-37" tabindex="-1"></a>    result_mat[, <span class="fu">c</span>(<span class="st">&quot;center&quot;</span>, <span class="st">&quot;spread&quot;</span>)],</span>
+<span id="cb9-38"><a href="#cb9-38" tabindex="-1"></a>    <span class="at">p.value =</span> <span class="fu">c</span>(<span class="dv">1</span>, p_groupComp_stm_mat[k, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]),</span>
+<span id="cb9-39"><a href="#cb9-39" tabindex="-1"></a>    <span class="at">effect.size =</span> <span class="fu">c</span>(<span class="dv">0</span>, ssmd_groupComp_stm_mat[k, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>])</span>
+<span id="cb9-40"><a href="#cb9-40" tabindex="-1"></a>  )</span>
+<span id="cb9-41"><a href="#cb9-41" tabindex="-1"></a>  <span class="fu">cyt_errbp</span>(center_df, <span class="at">p_lab =</span> <span class="cn">TRUE</span>, <span class="at">es_lab =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb9-42"><a href="#cb9-42" tabindex="-1"></a>            <span class="at">class_symbol =</span> <span class="cn">TRUE</span>, <span class="at">y_lab =</span> <span class="st">&quot;Concentration in log2 scale&quot;</span>, </span>
+<span id="cb9-43"><a href="#cb9-43" tabindex="-1"></a>            <span class="at">main =</span> cytokineNames[k])</span>
+<span id="cb9-44"><a href="#cb9-44" tabindex="-1"></a>}</span>
+<span id="cb9-45"><a href="#cb9-45" tabindex="-1"></a><span class="fu">par</span>(oldpar)</span>
+<span id="cb9-46"><a href="#cb9-46" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">dev.cur</span>() <span class="sc">&gt;</span> <span class="dv">1</span>) <span class="fu">dev.off</span>()</span>
+<span id="cb9-47"><a href="#cb9-47" tabindex="-1"></a><span class="co">#&gt; png </span></span>
+<span id="cb9-48"><a href="#cb9-48" tabindex="-1"></a><span class="co">#&gt;   2</span></span></code></pre></div>
+</div>
+</div>
+<div id="univariate-analysis" class="section level2">
+<h2>5. Univariate Analysis</h2>
+<div id="two-sample-t-test-and-mann-whitney-u-test" class="section level3">
+<h3>Two Sample T-test and Mann Whitney U Test</h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># Performing Two Sample T-test and Mann Whitney U Test</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>data_df <span class="ot">&lt;-</span> ExampleData1[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">3</span>)]</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>data_df <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(data_df, Group <span class="sc">!=</span> <span class="st">&quot;ND&quot;</span>, Treatment <span class="sc">!=</span> <span class="st">&quot;Unstimulated&quot;</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co"># Two sample T-test</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="fu">cyt_ttest</span>(data_df[, <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">5</span><span class="sc">:</span><span class="dv">6</span>)], <span class="at">scale =</span> <span class="st">&quot;log2&quot;</span>, <span class="at">verbose =</span> <span class="cn">TRUE</span>, <span class="at">format_output =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&gt;   Outcome Categorical      Comparison P_value</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; 1   IFN.G       Group   PreT2D vs T2D  0.0208</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co">#&gt; 2   IL.10       Group   PreT2D vs T2D  0.0248</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="co">#&gt; 3   IFN.G   Treatment CD3/CD28 vs LPS  0.0000</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="co">#&gt; 4   IL.10   Treatment CD3/CD28 vs LPS  0.0001</span></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co"># Mann-Whitney U Test</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="fu">cyt_ttest</span>(data_df[, <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">5</span><span class="sc">:</span><span class="dv">6</span>)], <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co">#&gt; $IFN.G_Group</span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="co">#&gt; [1] 0.0085</span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#&gt; $IL.10_Group</span></span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="co">#&gt; [1] 0.0119</span></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="co">#&gt; $IFN.G_Treatment</span></span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="co">#&gt; [1] 0</span></span>
+<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a><span class="co">#&gt; $IL.10_Treatment</span></span>
+<span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a><span class="co">#&gt; [1] 0</span></span></code></pre></div>
+</div>
+<div id="anova-comparisons-test" class="section level3">
+<h3>ANOVA Comparisons Test</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># Perform ANOVA comparisons test (example with 2 cytokines)</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">cyt_anova</span>(data_df[, <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">5</span><span class="sc">:</span><span class="dv">6</span>)], <span class="at">format_output =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="co">#&gt; [1] Outcome     Categorical Comparison  P_adj      </span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co">#&gt; &lt;0 rows&gt; (or 0-length row.names)</span></span></code></pre></div>
+</div>
+</div>
+<div id="multivariate-analysis" class="section level2">
+<h2>6. Multivariate Analysis</h2>
+<div id="partial-least-squares-discriminant-analysis-pls-da" class="section level3">
+<h3>Partial Least Squares Discriminant Analysis (PLS-DA)</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># cyt.plsda function. </span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>data <span class="ot">&lt;-</span> ExampleData1[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">3</span>)]</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>data_df <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(data, Group <span class="sc">!=</span> <span class="st">&quot;ND&quot;</span> <span class="sc">&amp;</span> Treatment <span class="sc">==</span> <span class="st">&quot;CD3/CD28&quot;</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="fu">cyt_splsda</span>(data_df, </span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>           <span class="at">pdf_title =</span> <span class="fu">file.path</span>(path, <span class="st">&quot;example_spls_da_analysis.pdf&quot;</span>), </span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>           <span class="at">colors =</span> <span class="fu">c</span>(<span class="st">&quot;black&quot;</span>, <span class="st">&quot;purple&quot;</span>),</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>           <span class="at">bg =</span> <span class="cn">FALSE</span>, <span class="at">scale =</span> <span class="st">&quot;log2&quot;</span>, <span class="at">ellipse =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>           <span class="at">conf_mat =</span> <span class="cn">FALSE</span>, <span class="at">var_num =</span> <span class="dv">25</span>, </span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>           <span class="at">cv_opt =</span> <span class="st">&quot;loocv&quot;</span>, <span class="at">comp_num =</span> <span class="dv">2</span>, </span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>           <span class="at">pch_values =</span> <span class="fu">c</span>(<span class="dv">16</span>, <span class="dv">4</span>), <span class="at">group_col =</span> <span class="st">&quot;Group&quot;</span>, <span class="at">group_col2 =</span> <span class="st">&quot;Treatment&quot;</span>, </span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>           <span class="at">roc =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a><span class="co">#&gt; png </span></span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a><span class="co">#&gt;   2</span></span></code></pre></div>
+</div>
+</div>
+<div id="principal-component-analysis-pca" class="section level2">
+<h2>7. Principal Component Analysis (PCA)</h2>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>data <span class="ot">&lt;-</span> ExampleData1[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">23</span>)]</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>data_df <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(data, Group <span class="sc">!=</span> <span class="st">&quot;ND&quot;</span> <span class="sc">&amp;</span> Treatment <span class="sc">!=</span> <span class="st">&quot;Unstimulated&quot;</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="fu">cyt_pca</span>(data_df, </span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>        <span class="at">pdf_title =</span> <span class="fu">file.path</span>(path, <span class="st">&quot;example_pca_analysis.pdf&quot;</span>), </span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>        <span class="at">colors =</span> <span class="fu">c</span>(<span class="st">&quot;black&quot;</span>, <span class="st">&quot;red2&quot;</span>), <span class="at">scale =</span> <span class="st">&quot;log2&quot;</span>, </span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>        <span class="at">comp_num =</span> <span class="dv">3</span>, <span class="at">pch_values =</span> <span class="fu">c</span>(<span class="dv">16</span>, <span class="dv">4</span>), </span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>        <span class="at">style =</span> <span class="st">&quot;3D&quot;</span>, <span class="at">group_col =</span> <span class="st">&quot;Group&quot;</span>, <span class="at">group_col2 =</span> <span class="st">&quot;Treatment&quot;</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Results based on log2 transformation:&quot;</span></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co">#&gt; png </span></span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="co">#&gt;   2</span></span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="fu">cyt_pca</span>(data_df, </span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>        <span class="at">pdf_title =</span> <span class="fu">file.path</span>(path, <span class="st">&quot;example_pca_analysis_2.pdf&quot;</span>), </span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a>        <span class="at">colors =</span> <span class="fu">c</span>(<span class="st">&quot;black&quot;</span>, <span class="st">&quot;red2&quot;</span>), <span class="at">scale =</span> <span class="st">&quot;log2&quot;</span>, </span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a>        <span class="at">comp_num =</span> <span class="dv">2</span>, <span class="at">pch_values =</span> <span class="fu">c</span>(<span class="dv">16</span>, <span class="dv">4</span>), <span class="at">group_col =</span> <span class="st">&quot;Group&quot;</span>)</span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Results based on log2 transformation:&quot;</span></span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="co">#&gt; png </span></span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">#&gt;   2</span></span></code></pre></div>
+</div>
+<div id="volcano-plot" class="section level2">
+<h2>8. Volcano Plot</h2>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># Generating Volcano Plot</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>data_df <span class="ot">&lt;-</span> ExampleData1[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>)]</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="fu">cyt_volc</span>(data_df, <span class="at">group_col =</span> <span class="st">&quot;Group&quot;</span>, </span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>                      <span class="at">cond1 =</span> <span class="st">&quot;T2D&quot;</span>, <span class="at">cond2 =</span> <span class="st">&quot;ND&quot;</span>, </span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>                      <span class="at">fold_change_thresh =</span> <span class="fl">2.0</span>, </span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>                      <span class="at">top_labels =</span> <span class="dv">15</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">#&gt; $`T2D vs ND`</span></span></code></pre></div>
+</div>
+<div id="heatmap" class="section level2">
+<h2>9. Heatmap</h2>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co"># Generating Heat map</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="fu">cyt_heatmap</span>(<span class="at">data =</span> data_df,</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>            <span class="at">scale =</span> <span class="st">&quot;log2&quot;</span>,        <span class="co"># Optional scaling</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>            <span class="at">annotation_col_name =</span> <span class="st">&quot;Group&quot;</span>,</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>            <span class="at">title =</span> <span class="cn">NULL</span>)</span></code></pre></div>
+</div>
+<div id="dual-flashlight-plot" class="section level2">
+<h2>10. Dual Flashlight Plot</h2>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># Generating dual flashlights plot</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>data_df <span class="ot">&lt;-</span> ExampleData1[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>)]</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>dfp <span class="ot">&lt;-</span> <span class="fu">cyt_dualflashplot</span>(data_df, <span class="at">group_var =</span> <span class="st">&quot;Group&quot;</span>, </span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>                         <span class="at">group1 =</span> <span class="st">&quot;T2D&quot;</span>, <span class="at">group2 =</span> <span class="st">&quot;ND&quot;</span>, </span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>                         <span class="at">ssmd_thresh =</span> <span class="sc">-</span><span class="fl">0.2</span>, <span class="at">log2fc_thresh =</span> <span class="dv">1</span>, </span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>                         <span class="at">top_labels =</span> <span class="dv">10</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a><span class="co"># Print the plot</span></span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>dfp</span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a><span class="co"># Print the table data used for plotting</span></span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a><span class="fu">print</span>(dfp<span class="sc">$</span>data)</span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a><span class="co">#&gt; # A tibble: 25 × 11</span></span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a><span class="co">#&gt;    cytokine         mean_ND mean_PreT2D mean_T2D variance_ND variance_PreT2D</span></span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a><span class="co">#&gt;    &lt;chr&gt;              &lt;dbl&gt;       &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;           &lt;dbl&gt;</span></span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a><span class="co">#&gt;  1 CCL.20.MIP.3A   634.        404.       887.      6.72e+ 5         2.74e+5</span></span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a><span class="co">#&gt;  2 GM.CSF            2.65        3.11       1.92    2.63e+ 1         3.14e+1</span></span>
+<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a><span class="co">#&gt;  3 IFN.G         57730.      18303.     61484.      2.86e+10         2.30e+9</span></span>
+<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a><span class="co">#&gt;  4 IL.10           979.        836.      1366.      1.99e+ 6         1.19e+6</span></span>
+<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a><span class="co">#&gt;  5 IL.12.P70        13.0        39.1       78.9     4.15e+ 2         2.56e+4</span></span>
+<span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a><span class="co">#&gt;  6 IL.13          1064.       1543.      1122.      5.60e+ 6         1.11e+7</span></span>
+<span id="cb16-20"><a href="#cb16-20" tabindex="-1"></a><span class="co">#&gt;  7 IL.15             7.92        4.29       8.22    3.54e+ 1         2.58e+1</span></span>
+<span id="cb16-21"><a href="#cb16-21" tabindex="-1"></a><span class="co">#&gt;  8 IL.17A          352.        653.       615.      9.40e+ 5         2.88e+6</span></span>
+<span id="cb16-22"><a href="#cb16-22" tabindex="-1"></a><span class="co">#&gt;  9 IL.17E.IL.25      0.0101      0.0163     0.01    1.01e- 6         3.88e-3</span></span>
+<span id="cb16-23"><a href="#cb16-23" tabindex="-1"></a><span class="co">#&gt; 10 IL.17F            1.63        2.35       3.11    1.56e+ 1         3.37e+1</span></span>
+<span id="cb16-24"><a href="#cb16-24" tabindex="-1"></a><span class="co">#&gt; # ℹ 15 more rows</span></span>
+<span id="cb16-25"><a href="#cb16-25" tabindex="-1"></a><span class="co">#&gt; # ℹ 5 more variables: variance_T2D &lt;dbl&gt;, ssmd &lt;dbl&gt;, log2FC &lt;dbl&gt;,</span></span>
+<span id="cb16-26"><a href="#cb16-26" tabindex="-1"></a><span class="co">#&gt; #   SSMD_Category &lt;chr&gt;, Significant &lt;lgl&gt;</span></span></code></pre></div>
+</div>
+<div id="machine-learning-models" class="section level2">
+<h2>11. Machine Learning Models</h2>
+<div id="using-xgboost-for-classification" class="section level3">
+<h3>Using XGBoost for classification</h3>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co"># Using XGBoost for classification</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>data_df0 <span class="ot">&lt;-</span> ExampleData1</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>data_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(data_df0[, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>], <span class="fu">log2</span>(data_df0[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)]))</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>data_df <span class="ot">&lt;-</span> data_df[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>)]</span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>data_df <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(data_df, Group <span class="sc">!=</span> <span class="st">&quot;ND&quot;</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a><span class="fu">cyt_xgb</span>(<span class="at">data =</span> data_df, <span class="at">group_col =</span> <span class="st">&quot;Group&quot;</span>,</span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a>                       <span class="at">nrounds =</span> <span class="dv">500</span>, <span class="at">max_depth =</span> <span class="dv">4</span>, <span class="at">eta =</span> <span class="fl">0.05</span>,</span>
+<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a>                       <span class="at">nfold =</span> <span class="dv">5</span>, <span class="at">cv =</span> <span class="cn">TRUE</span>, <span class="at">eval_metric =</span> <span class="st">&quot;mlogloss&quot;</span>,</span>
+<span id="cb17-10"><a href="#cb17-10" tabindex="-1"></a>                       <span class="at">early_stopping_rounds =</span> <span class="cn">NULL</span>, <span class="at">top_n_features =</span> <span class="dv">10</span>,</span>
+<span id="cb17-11"><a href="#cb17-11" tabindex="-1"></a>                       <span class="at">verbose =</span> <span class="dv">0</span>, <span class="at">plot_roc =</span> <span class="cn">TRUE</span>, <span class="at">print_results =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+</div>
+<div id="using-random-forest-for-classification" class="section level3">
+<h3>Using Random Forest for classification</h3>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co"># Using Random Forest for classification</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="fu">cyt_rf</span>(<span class="at">data =</span> data_df, <span class="at">group_col =</span> <span class="st">&quot;Group&quot;</span>, <span class="at">k_folds =</span> <span class="dv">5</span>,</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>                     <span class="at">ntree =</span> <span class="dv">1000</span>, <span class="at">mtry =</span> <span class="dv">4</span>, <span class="at">run_rfcv =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a>                     <span class="at">plot_roc =</span> <span class="cn">TRUE</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
