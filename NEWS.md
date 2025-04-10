@@ -1,6 +1,27 @@
+# CytoProfile 0.2.0
+
+# CytoProfile 0.1.2.9000 (development version)
+
+## Major Changes
+
+* 'cyt_splsda': Fixed an error occurring when only one variable has VIP > 1 leading to not being able to conduct sPLS-DA analysis. Now, the function checks whether the number of VIP > 1 variables is below 2, if that is true the sPLS-DA model of VIP > 1 is skipped. 
+
+* Fixed an issue with the 'verbose' argument of 'cyt_splsda' not working in overall analysis due to calling the wrong object.
+
+* 'cyt_errbp' now uses 'ggplot2' with 'facet_wrap' to create multiple error-bar plots where the p-value and effect size labels are based on t-test comparisons between the groups. 
+
+## Minor Changes and Bug Fixes
+
+* 'cyt_errbp', 'cyt_bp', 'cyt_bp2', and 'cyt_skku' received a minor theme update keeping the background white in scenarios where it may appear transparent due to using 'theme_minimal()'. 
+
+* Fixed some grammatical and spelling issues in the README file. 
+
+* Vignette for the package now show plots generated that aren't saved to PDF files. A temporary directory is not created anymore.
+
+
 # CytoProfile 0.1.2
 
-* Added references in description field of the DESCRIPTION file to the multivariate methods mentioned in the format 'Authors (Year) <doi:...>'.
+## Major Changes
 
 * 'cyt_rf', 'cyt_splsda', 'cyt_ttest', 'cyt_dualflashplot', and 'cyt_volc' now have a logical 'verbose' argument to print the output if user wants to. This is to ensure printed output in console can be easily suppressed.
 
@@ -10,14 +31,19 @@
 
 * Have removed the arguments for changing graphical parameters in 'cyt_bp', and 'cyt_bp2' so it no longer requires changes to the user's graphical parameters.
 
+* Added a new 'format_output' argument to 'cyt_anova' and 'cyt_ttest' to format the output as a data frame which can be printed to show neat format, however still dependent on whether 'verbose' equals TRUE or FALSE. 
+
+* 'cyt_rf', 'cyt_splsda', and 'cyt_xgb' now has a 'seed' argument to set the seed for reproducibility. 
+
+## Minor Changes and Bug Fixes
+
+* Added references in description field of the DESCRIPTION file to the multivariate methods mentioned in the format 'Authors (Year) <doi:...>'.
+
 * Updated examples from graphical parameters changing without resetting properly to now the graphical parameters reverting to original using 'oldpar <- par(no.readonly = TRUE)' in the beginning and par(oldpar) after execution of code.
 
 * Updated 'getting_started.Rmd' vignette where the files created and saved are now saved to a temporary directory using 'tempdir()' to avoid creating files in the user's working directory. Additionally, 
 the vignette now uses 'oldpar <- par(no.readonly = TRUE)' in the beginning and par(oldpar) after code execution to revert to original graphical parameters for the 'cyt_errbp' examples shown.
 
-* Added a new 'format_output' argument to 'cyt_anova' and 'cyt_ttest' to format the output as a data frame which can be printed to show neat format, however still dependent on whether 'verbose' equals TRUE or FALSE. 
-
-* 'cyt_rf', 'cyt_splsda', and 'cyt_xgb' now has a 'seed' argument to set the seed for reproducibility. 
 
 # CytoProfile 0.1.1
 

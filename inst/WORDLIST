@@ -33,6 +33,7 @@ Mfold
 Nikolajczyk
 ORCID
 Periodontitis
+README
 RStudio
 Ratajczak
 Rmd
@@ -50,12 +51,15 @@ anova
 bp
 cyt
 cytokine
+data's
 doi
 dualflashplot
 errbp
 ggplot
 https
+img
 inflammaging
+io
 loadings
 loocv
 md
@@ -74,6 +78,7 @@ sPLS
 skku
 softprob
 splsda
+svg
 tempdir
 ttest
 volc
