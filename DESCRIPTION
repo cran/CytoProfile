@@ -1,6 +1,6 @@
 Package: CytoProfile
 Title: Cytokine Profiling Analysis Tool
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: c(
     person("Shubh", "Saraswat", email = "shubh.saraswat00@gmail.com", role = c("cre", "aut", "cph"),
     comment = c(ORCID = "0009-0009-2359-1484")),
@@ -10,7 +10,7 @@ Description: Provides comprehensive cytokine profiling analysis through quality 
 Encoding: UTF-8
 RoxygenNote: 7.3.2
 URL: https://github.com/saraswatsh/CytoProfile,
-        https://saraswatsh.github.io/CytoProfile/
+        https://cytoprofile.cytokineprofile.org/
 Depends: R (>= 4.3)
 Imports: mixOmics, dplyr, tidyr, pROC, plot3D, caret, xgboost,
         randomForest, gplots, e1071, ggplot2, ggrepel, gridExtra,
@@ -23,10 +23,11 @@ LazyData: true
 VignetteBuilder: knitr
 BugReports: https://github.com/saraswatsh/CytoProfile/issues
 Language: en-US
-Packaged: 2025-04-10 23:10:56 UTC; shubh
-Author: Shubh Saraswat [cre, aut, cph]
-    (<https://orcid.org/0009-0009-2359-1484>),
-  Xiaohua Douglas Zhang [aut] (<https://orcid.org/0000-0002-2486-7931>)
+Packaged: 2025-05-19 15:40:28 UTC; shubh
+Author: Shubh Saraswat [cre, aut, cph] (ORCID:
+    <https://orcid.org/0009-0009-2359-1484>),
+  Xiaohua Douglas Zhang [aut] (ORCID:
+    <https://orcid.org/0000-0002-2486-7931>)
 Maintainer: Shubh Saraswat <shubh.saraswat00@gmail.com>
 Repository: CRAN
-Date/Publication: 2025-04-10 23:30:02 UTC
+Date/Publication: 2025-05-19 16:10:02 UTC

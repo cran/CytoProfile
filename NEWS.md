@@ -1,6 +1,17 @@
-# CytoProfile 0.2.0
+# CytoProfile 0.2.1
 
-# CytoProfile 0.1.2.9000 (development version)
+## Major Changes
+
+* 'cyt_ttest' now conducts shapiro-wilk test and based on the p-value decides to do Welch two sample t-test or Wilcoxon Rank Sum Test. 
+
+## Minor Changes and Bug Fixes
+
+* Updated 'cyt_pca' and 'cyt_splsda' to use the appropriate pch argument in plotIndiv().
+* Updated 'cyt_ttest' examples.  
+* Updated citation formatting.
+* Changed links
+
+# CytoProfile 0.2.0
 
 ## Major Changes
 
