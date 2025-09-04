@@ -69,7 +69,7 @@ library(tidyr) # For reshaping data (e.g., pivot_longer, pivot_wider).
 library(ggplot2) # For creating all the ggplot-based visualizations.
 library(gridExtra) # For arranging multiple plots on a single page.
 library(ggrepel) # For improved label placement in plots (e.g., volcano plots).
-library(gplots) # For heatmap.2, which is used to generate heatmaps.
+library(pheatmap) # For heatmap.2, which is used to generate heatmaps.
 library(plot3D) # For creating 3D scatter plots in PCA and sPLS-DA analyses.
 library(reshape2) # For data transformation (e.g., melt) in cross-validation plots.
 
@@ -221,10 +221,30 @@ cyt_splsda(
 )
 ```
 
+### Multivariate INTegration Partial Least Squares Discriminant Analysis (PLS-DA) 
 
-## 7. Principal Component Analysis (PCA)
+```{r, Multivariate2, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE, fig.show = "hold", out.width = "25%", fig.ncol = 2, fig.width=7, fig.height=6}
+# cyt_mint_plsda function.
+data_df <- ExampleData5[, -c(2, 4)]
+data_df <- dplyr::filter(data_df, Group != "ND")
 
-```{r, Multivariate2, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE,  fig.show = "hold", out.width = "25%"}
+cyt_mint_splsda(
+  data_df,
+  group_col = "Group",
+  batch_col = "Batch",
+  colors = c("black", "purple"),
+  ellipse = TRUE,
+  var_num = 25,
+  comp_num = 2,
+  scale = "log2",
+  verbose = FALSE
+)
+```
+
+
+### Principal Component Analysis (PCA)
+
+```{r, Multivariate3, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE,  fig.show = "hold", out.width = "25%"}
 data <- ExampleData1[, -c(3, 23)]
 data_df <- dplyr::filter(data, Group != "ND" & Treatment != "Unstimulated")
 cyt_pca(
@@ -239,7 +259,9 @@ cyt_pca(
 
 ```
 
-## 8. Volcano Plot
+## 7. Statistical Visualizations
+
+### Volcano Plot
 
 ```{r, EDA6, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE}
 # Generating Volcano Plot
@@ -255,19 +277,19 @@ cyt_volc(
 
 ```
 
-## 9. Heatmap
+### Heatmap
 
 ```{r,EDA7, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE, fig.width=5, fig.height=4}
 # Generating Heat map
 cyt_heatmap(
   data = data_df,
   scale = "log2", # Optional scaling
-  annotation_col_name = "Group",
+  annotation_col = "Group",
   title = NULL
 )
 ```
 
-## 10. Dual Flashlight Plot
+### Dual Flashlight Plot
 
 ```{r,EDA8, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE}
 # Generating dual flashlights plot
@@ -287,7 +309,7 @@ dfp
 print(dfp$data, n = 25)
 ```
 
-## 11. Machine Learning Models
+## 8. Machine Learning Models
 
 ### Using XGBoost for classification
 

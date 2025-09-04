@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# CytoProfile <a href="https://cytoprofile.cytokineprofile.org/"><img src="man/figures/logo.png" align="right" height="150" alt="CytoProfile website" /></a>
+# CytoProfile <a href="https://cytoprofile.cytokineprofile.org/"><img src="man/figures/logo.png" align="right" height="133" alt="CytoProfile website" /></a>
 
 <!-- badges: start -->
 
@@ -70,7 +70,7 @@ library(tidyr) # For reshaping data (e.g., pivot_longer, pivot_wider).
 library(ggplot2) # For creating all the ggplot-based visualizations.
 library(gridExtra) # For arranging multiple plots on a single page.
 library(ggrepel) # For improved label placement in plots (e.g., volcano plots).
-library(gplots) # For heatmap.2, which is used to generate heatmaps.
+library(pheatmap) # For heatmap.2, which is used to generate heatmaps.
 library(plot3D) # For creating 3D scatter plots in PCA and sPLS-DA analyses.
 library(reshape2) # For data transformation (e.g., melt) in cross-validation plots.
 
@@ -249,7 +249,7 @@ cyt_anova(data_df[, c(1:2, 5:6)], format_output = TRUE)
 
 ## 6. Multivariate Analysis
 
-### Partial Least Squares Discriminant Analysis (PLS-DA)
+### Sparse Partial Least Squares Discriminant Analysis (sPLS-DA)
 
 ``` r
 # cyt_plsda function.
@@ -275,7 +275,29 @@ cyt_splsda(
 
 <img src="man/figures/readme-Multivariate1-1.png" width="50%" /><img src="man/figures/readme-Multivariate1-2.png" width="50%" /><img src="man/figures/readme-Multivariate1-3.png" width="50%" /><img src="man/figures/readme-Multivariate1-4.png" width="50%" /><img src="man/figures/readme-Multivariate1-5.png" width="50%" /><img src="man/figures/readme-Multivariate1-6.png" width="50%" /><img src="man/figures/readme-Multivariate1-7.png" width="50%" /><img src="man/figures/readme-Multivariate1-8.png" width="50%" /><img src="man/figures/readme-Multivariate1-9.png" width="50%" /><img src="man/figures/readme-Multivariate1-10.png" width="50%" /><img src="man/figures/readme-Multivariate1-11.png" width="50%" /><img src="man/figures/readme-Multivariate1-12.png" width="50%" />
 
-## 7. Principal Component Analysis (PCA)
+### Multivariate INTegration Partial Least Squares Discriminant Analysis (MINT sPLS-DA)
+
+``` r
+# cyt_mint_plsda function.
+data_df <- ExampleData5[, -c(2, 4)]
+data_df <- dplyr::filter(data_df, Group != "ND")
+
+cyt_mint_splsda(
+  data_df,
+  group_col = "Group",
+  batch_col = "Batch",
+  colors = c("black", "purple"),
+  ellipse = TRUE,
+  var_num = 25,
+  comp_num = 2,
+  scale = "log2",
+  verbose = FALSE
+)
+```
+
+<img src="man/figures/readme-Multivariate2-1.png" width="50%" /><img src="man/figures/readme-Multivariate2-2.png" width="50%" /><img src="man/figures/readme-Multivariate2-3.png" width="50%" /><img src="man/figures/readme-Multivariate2-4.png" width="50%" /><img src="man/figures/readme-Multivariate2-5.png" width="50%" /><img src="man/figures/readme-Multivariate2-6.png" width="50%" /><img src="man/figures/readme-Multivariate2-7.png" width="50%" /><img src="man/figures/readme-Multivariate2-8.png" width="50%" /><img src="man/figures/readme-Multivariate2-9.png" width="50%" />
+
+### Principal Component Analysis (PCA)
 
 ``` r
 data <- ExampleData1[, -c(3, 23)]
@@ -289,12 +311,13 @@ cyt_pca(
   pch_values = c(16, 4),
   group_col = "Group"
 )
-#> [1] "Results based on log2 transformation:"
 ```
 
-<img src="man/figures/readme-Multivariate2-1.png" width="50%" /><img src="man/figures/readme-Multivariate2-2.png" width="50%" /><img src="man/figures/readme-Multivariate2-3.png" width="50%" /><img src="man/figures/readme-Multivariate2-4.png" width="50%" /><img src="man/figures/readme-Multivariate2-5.png" width="50%" /><img src="man/figures/readme-Multivariate2-6.png" width="50%" />
+<img src="man/figures/readme-Multivariate3-1.png" width="50%" /><img src="man/figures/readme-Multivariate3-2.png" width="50%" /><img src="man/figures/readme-Multivariate3-3.png" width="50%" /><img src="man/figures/readme-Multivariate3-4.png" width="50%" /><img src="man/figures/readme-Multivariate3-5.png" width="50%" /><img src="man/figures/readme-Multivariate3-6.png" width="50%" />
 
-## 8. Volcano Plot
+## 7. Statistical Visualizations
+
+### Volcano Plot
 
 ``` r
 # Generating Volcano Plot
@@ -312,21 +335,21 @@ cyt_volc(
 
 <img src="man/figures/readme-EDA6-1.png" width="100%" />
 
-## 9. Heatmap
+### Heatmap
 
 ``` r
 # Generating Heat map
 cyt_heatmap(
   data = data_df,
   scale = "log2", # Optional scaling
-  annotation_col_name = "Group",
+  annotation_col = "Group",
   title = NULL
 )
 ```
 
 <img src="man/figures/readme-EDA7-1.png" width="100%" />
 
-## 10. Dual Flashlight Plot
+### Dual Flashlight Plot
 
 ``` r
 # Generating dual flashlights plot
@@ -381,7 +404,7 @@ print(dfp$data, n = 25)
 #> #   SSMD_Category <chr>, Significant <lgl>
 ```
 
-## 11. Machine Learning Models
+## 8. Machine Learning Models
 
 ### Using XGBoost for classification
 

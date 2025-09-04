@@ -1,16 +1,22 @@
 Agrawal
 Andrzej
+BMC
 Besse
 Bharath
 BiocManager
+Bioinformatics
 Boitard
+Bougeard
 Breiman
 CCL
+CIM
 CMD
 CSF
 Calvo
 Cao
 Cytokine
+Eslami
+ExampleData
 Fouladvand
 GH
 GeroScience
@@ -21,6 +27,8 @@ HSD
 Hasturk
 IFN
 IFNg
+INTegration
+INTegrative
 Javidan
 Kalantar
 LOOCV
@@ -28,6 +36,7 @@ Loadings
 Lê
 MIP
 Marszalkowski
+Matigian
 Maćkiewicz
 Mfold
 Nikolajczyk
@@ -37,6 +46,7 @@ README
 RStudio
 Ratajczak
 Rmd
+Rohart
 SSMD
 SantaCruz
 TNF
@@ -49,6 +59,7 @@ XGBoost
 Xiaohua
 Zukowski
 anova
+biomarker
 bp
 cyt
 cytokine
@@ -65,10 +76,12 @@ md
 metformin
 mixOmics
 mlogloss
+multiclass
 oby
 oldpar
 pca
 pch
+pheatmap
 plotIndiv
 png
 preprocess
@@ -85,3 +98,4 @@ ttest
 volc
 wilk
 xgb
+zscore

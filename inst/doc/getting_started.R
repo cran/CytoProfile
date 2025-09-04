@@ -18,7 +18,7 @@ library(tidyr) # For reshaping data (e.g., pivot_longer, pivot_wider).
 library(ggplot2) # For creating all the ggplot-based visualizations.
 library(gridExtra) # For arranging multiple plots on a single page.
 library(ggrepel) # For improved label placement in plots (e.g., volcano plots).
-library(gplots) # For heatmap.2, which is used to generate heatmaps.
+library(pheatmap) # For heatmap.2, which is used to generate heatmaps.
 library(plot3D) # For creating 3D scatter plots in PCA and sPLS-DA analyses.
 library(reshape2) # For data transformation (e.g., melt) in cross-validation plots.
 
@@ -137,7 +137,24 @@ cyt_splsda(
   roc = TRUE
 )
 
-## ----Multivariate2, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE,  fig.show = "hold", out.width = "25%"----
+## ----Multivariate2, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE, fig.show = "hold", out.width = "25%", fig.ncol = 2, fig.width=7, fig.height=6----
+# cyt_mint_plsda function.
+data_df <- ExampleData5[, -c(2, 4)]
+data_df <- dplyr::filter(data_df, Group != "ND")
+
+cyt_mint_splsda(
+  data_df,
+  group_col = "Group",
+  batch_col = "Batch",
+  colors = c("black", "purple"),
+  ellipse = TRUE,
+  var_num = 25,
+  comp_num = 2,
+  scale = "log2",
+  verbose = FALSE
+)
+
+## ----Multivariate3, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE,  fig.show = "hold", out.width = "25%"----
 data <- ExampleData1[, -c(3, 23)]
 data_df <- dplyr::filter(data, Group != "ND" & Treatment != "Unstimulated")
 cyt_pca(
@@ -169,7 +186,7 @@ cyt_volc(
 cyt_heatmap(
   data = data_df,
   scale = "log2", # Optional scaling
-  annotation_col_name = "Group",
+  annotation_col = "Group",
   title = NULL
 )
 

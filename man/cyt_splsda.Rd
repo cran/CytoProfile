@@ -9,8 +9,11 @@ cyt_splsda(
   data,
   group_col = NULL,
   group_col2 = NULL,
+  multilevel_col = NULL,
+  batch_col = NULL,
+  ind_names = FALSE,
   colors = NULL,
-  pdf_title,
+  pdf_title = NULL,
   ellipse = FALSE,
   bg = FALSE,
   conf_mat = FALSE,
@@ -37,6 +40,16 @@ be performed.}
 
 \item{group_col2}{A string specifying the second grouping column. Default is
 \code{NULL}.}
+
+\item{multilevel_col}{A string specifying the column name that identifies
+repeated measurements (e.g., patient or sample IDs). If provided, a
+multilevel analysis will be performed. Default is \code{NULL}.}
+
+\item{batch_col}{A string specifying the column that identifies the batch or study for each sample.}
+
+\item{ind_names}{If \code{TRUE}, the row names of the first (or second) data matrix is used as names.
+Default is \code{FALSE}. If a character vector is provided, these values will be used as names.
+If 'pch' is set this will overwrite the names as shapes. See ?mixOmics::plotIndiv for details.}
 
 \item{colors}{A vector of colors for the groups or treatments. If
 \code{NULL}, a random palette (using \code{rainbow}) is generated based on
@@ -105,9 +118,8 @@ both \code{group_col} and \code{group_col2} are provided and differ, the functio
 analyzes each treatment level separately.
 }
 \details{
-When \code{verbose} is set to \code{TRUE}, additional diagnostic plots (e.g., VIP plots, ROC Plots, Cross-Validation Plots)
-are printed to the console. These plots provide extra insight into the model's performance
-but can be suppressed by keeping \code{verbose = FALSE}.
+When \code{verbose} is set to \code{TRUE}, additional information about the analysis and confusion matrices
+are printed to the console. These can be suppressed by keeping \code{verbose = FALSE}.
 }
 \examples{
 # Loading Sample Data
@@ -120,4 +132,13 @@ conf_mat = FALSE, var_num = 25, cv_opt = NULL, comp_num = 2,
 pch_values = c(16, 4), style = NULL, ellipse = TRUE,
 group_col = "Group", group_col2 = "Treatment", roc = FALSE, verbose = FALSE)
 
+}
+\references{
+Lê Cao, K.-A., Boitard, S. and Besse, P. (2011).
+Sparse PLS Discriminant Analysis: biologically relevant feature selection
+and graphical displays for multiclass problems. \emph{BMC Bioinformatics}
+\bold{12}:253.
+}
+\author{
+Xiaohua Douglas Zhang and Shubh Saraswat
 }
