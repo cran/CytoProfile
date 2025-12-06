@@ -62,7 +62,6 @@ cyt_bp2(data_df[, -c(3, 5:28)], pdf_title = NULL, scale = "log2")
 
 
 ## ----EDA3, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE----------------
-data_df <- ExampleData1
 # Histogram for overall raw data
 cyt_skku(data_df[, -c(1:3)], pdf_title = NULL, group_cols = NULL)
 
@@ -167,7 +166,6 @@ cyt_pca(
   group_col = "Group"
 )
 
-
 ## ----EDA6, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE----------------
 # Generating Volcano Plot
 data_df <- ExampleData1[, -c(2:3)]
@@ -179,7 +177,6 @@ cyt_volc(
   fold_change_thresh = 2.0,
   top_labels = 15
 )
-
 
 ## ----EDA7, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE, fig.width=5, fig.height=4----
 # Generating Heat map
@@ -219,10 +216,12 @@ cyt_xgb(
   group_col = "Group",
   nrounds = 500,
   max_depth = 4,
-  eta = 0.05,
+  min_split_loss = 0,
+  learning_rate = 0.05,
   nfold = 5,
   cv = TRUE,
-  eval_metric = "mlogloss",
+  objective = "multi:softprob",
+  eval_metric = "auc",
   early_stopping_rounds = NULL,
   top_n_features = 10,
   verbose = 0,
