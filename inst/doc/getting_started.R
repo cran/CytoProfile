@@ -2,243 +2,267 @@
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.show = "hold",
-  fig.pos = "h",
-  out.width = "42%",
-  fig.retina = 2
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  fig.align = "center",
+  fig.retina = 2,
+  dpi = 96,
+  out.width = "100%",
+  fig.width = 8,
+  fig.height = 5
 )
 
-## ----setup, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE---------------
-# Loading all packages required
-# Data manipulation and reshaping
-library(dplyr) # For data filtering, grouping, and summarising.
-library(tidyr) # For reshaping data (e.g., pivot_longer, pivot_wider).
-
-# Plotting and visualization
-library(ggplot2) # For creating all the ggplot-based visualizations.
-library(gridExtra) # For arranging multiple plots on a single page.
-library(ggrepel) # For improved label placement in plots (e.g., volcano plots).
-library(pheatmap) # For heatmap.2, which is used to generate heatmaps.
-library(plot3D) # For creating 3D scatter plots in PCA and sPLS-DA analyses.
-library(reshape2) # For data transformation (e.g., melt) in cross-validation plots.
-
-# Statistical analysis
-library(mixOmics) # For multivariate analyses (PCA, sPLS-DA, etc.).
-library(e1071) # For computing skewness and kurtosis.
-library(pROC) # For ROC curve generation in machine learning model evaluation.
-
-# Machine learning
-library(xgboost) # For building XGBoost classification models.
-library(randomForest) # For building Random Forest classification models.
-library(caret) # For cross-validation and other machine learning utilities.
-
-# Package development and document rendering
-library(knitr) # For knitting RMarkdown files and setting chunk options.
-library(devtools) # For installing the development version of the package from GitHub.
-
-# Load in the CytoProfile package
+## ----setup--------------------------------------------------------------------
 library(CytoProfile)
+library(dplyr)   # used only for filter() in the examples below
 
-# Loading in data
+## ----load-data----------------------------------------------------------------
 data("ExampleData1")
 data_df <- ExampleData1
 
-## ----EDA1,  echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE---------------
-# Generating boxplots to check for outliers for raw values
-cyt_bp(data_df[, -c(1:3)], pdf_title = NULL)
-# Removing the first 3 columns to retain only continuous variables.
+# Inspect structure
+dim(data_df)
+names(data_df)[1:6]
+head(data_df[, 1:5])
+table(data_df$Group)
+table(data_df$Treatment)
 
-# Generating boxplots to check for outliers for log2 values
-cyt_bp(data_df[, -c(1:3)], pdf_title = NULL, scale = "log2")
+## ----boxplots, fig.height=5---------------------------------------------------
+# Ungrouped boxplots with log2 transformation
+# All numeric columns are plotted; up to bin_size = 25 per page
+cyt_bp(data_df[, -c(1:3)], output_file = NULL, scale = "log2")
 
-
-## ----EDA2, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE----------------
-# Raw values for group-specific boxplots
-cyt_bp2(data_df[, -c(3, 5:28)], pdf_title = NULL, scale = NULL)
-
-# Log2-transformed group-specific boxplots
-cyt_bp2(data_df[, -c(3, 5:28)], pdf_title = NULL, scale = "log2")
-
-
-
-## ----EDA3, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE----------------
-# Histogram for overall raw data
-cyt_skku(data_df[, -c(1:3)], pdf_title = NULL, group_cols = NULL)
-
-# Histogram with grouping (e.g., "Group")
-cyt_skku(ExampleData1[, -c(2:3)], pdf_title = NULL, group_cols = c("Group"))
-
-
-## ----EDA4,  echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE---------------
-# Generating basic error bar plots
-data_df <- ExampleData1
-cyt_errbp(
-  data_df[, c("Group", "CCL.20.MIP.3A", "IL.10")],
-  group_col = "Group",
-  p_lab = FALSE,
-  es_lab = FALSE,
-  class_symbol = FALSE,
-  x_lab = "Cytokines",
-  y_lab = "Concentrations in log2 scale",
-  log2 = TRUE
+## ----boxplots-grouped, fig.height=4-------------------------------------------
+# Grouped boxplots: one plot per cytokine, colored by Group
+# Only passing Group and two cytokines for a concise display
+cyt_bp(
+  data_df[, c("Group", "IL-10", "CCL-20/MIP-3A")],
+  group_by = "Group",
+  scale = "zscore"
 )
 
-## ----EDA5,  echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE---------------
-# Generating Error Bar Plot enriched with p-value and effect size
-data_df <- ExampleData1
-cyt_errbp(
-  data_df[, c("Group", "CCL.20.MIP.3A", "IL.10")],
-  group_col = "Group",
-  p_lab = TRUE,
-  es_lab = TRUE,
-  class_symbol = TRUE,
-  x_lab = "Cytokines",
-  y_lab = "Concentrations in log2 scale",
-  log2 = TRUE
+## ----violins, fig.height=5----------------------------------------------------
+# Ungrouped violin plots with z-score scaling
+cyt_violin(data_df[, -c(1:3)], output_file = NULL, scale = "zscore")
+
+## ----violins-grouped, fig.height=4--------------------------------------------
+# Grouped violin plots with boxplot overlay and log2 scaling
+cyt_violin(
+  data_df[, c("Group", "IL-10", "CCL-20/MIP-3A")],
+  group_by = "Group",
+  boxplot_overlay = TRUE,
+  scale = "log2"
 )
 
+## ----skku, fig.height=6-------------------------------------------------------
+# Overall distributional assessment (no grouping)
+cyt_skku(data_df[, -c(1:3)], output_file = NULL, group_cols = NULL)
 
-## ----Univariate1,  echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE--------
-# Performing Test
-data_df <- ExampleData1[, -c(3)]
-data_df <- dplyr::filter(data_df, Group != "ND", Treatment != "Unstimulated")
-# Test example
-cyt_ttest(
-  data_df[, c(1:2, 5:6)],
+## ----skku-grouped, fig.height=6-----------------------------------------------
+# Grouped assessment by "Group"
+cyt_skku(data_df[, -c(2:3)], output_file = NULL, group_cols = c("Group"))
+
+## ----errbp, fig.height=6, fig.width=9-----------------------------------------
+# Basic error bar plot: default mean +/- SE
+df_err <- ExampleData1[, c("Group", "CCL-20/MIP-3A", "IL-10")]
+cyt_errbp(
+  df_err,
+  group_col = "Group",
+  x_lab = "Group",
+  y_lab = "Concentration"
+)
+
+## ----errbp-symbols, fig.height=6, fig.width=9---------------------------------
+# Mean +/- SD with log2 transformation, symbols, and t-test
+cyt_errbp(
+  df_err,
+  group_col = "Group",
+  stat = "mean",
+  error = "sd",
   scale = "log2",
-  verbose = TRUE,
+  class_symbol = TRUE,
+  method = "ttest",
+  x_lab = "Group",
+  y_lab = "Concentration (log2)"
+)
+
+## ----univariate---------------------------------------------------------------
+data_uni <- ExampleData1[, -c(3)]
+data_uni <- dplyr::filter(data_uni, Group != "ND", Treatment != "Unstimulated")
+
+# Tidy output with log2 transformation and automatic test selection
+cyt_univariate(
+  data_uni[, c("Group", "Treatment", "IL-10", "CCL-20/MIP-3A")],
+  scale    = "log2",
+  method   = "auto",
+  format_output = TRUE,
+  p_adjust_method = "BH"
+)
+
+## ----univariate-multi---------------------------------------------------------
+# Kruskal-Wallis with pairwise Wilcoxon for multi-group comparison
+cyt_univariate_multi(
+  ExampleData1[, c("Group", "IL-10", "CCL-20/MIP-3A")],
+  method = "kruskal",
   format_output = TRUE
 )
 
-## ----Univariate2,  echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE--------
-# Perform ANOVA comparisons test (example with 2 cytokines)
-data_df <- ExampleData1[, -c(3)]
-cyt_anova(data_df[, c(1:2, 5:6)], format_output = TRUE)
+## ----volcano, fig.height=5, fig.width=7---------------------------------------
+data_volc <- ExampleData1[, -c(2:3)]
 
-## ----Multivariate1, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE, fig.show = "hold", out.width = "25%"----
-# cyt_plsda function.
-data <- ExampleData1[, -c(3)]
-data_df <- dplyr::filter(data, Group != "ND" & Treatment == "CD3/CD28")
-cyt_splsda(
-  data_df,
-  pdf_title = NULL,
-  colors = c("black", "purple"),
-  bg = FALSE,
-  scale = "log2",
-  ellipse = TRUE,
-  conf_mat = FALSE,
-  var_num = 25,
-  cv_opt = "loocv",
-  comp_num = 2,
-  pch_values = c(16, 4),
-  group_col = "Group",
-  group_col2 = "Treatment",
-  roc = TRUE
-)
-
-## ----Multivariate2, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE, fig.show = "hold", out.width = "25%", fig.ncol = 2, fig.width=7, fig.height=6----
-# cyt_mint_plsda function.
-data_df <- ExampleData5[, -c(2, 4)]
-data_df <- dplyr::filter(data_df, Group != "ND")
-
-cyt_mint_splsda(
-  data_df,
-  group_col = "Group",
-  batch_col = "Batch",
-  colors = c("black", "purple"),
-  ellipse = TRUE,
-  var_num = 25,
-  comp_num = 2,
-  scale = "log2",
-  verbose = FALSE
-)
-
-## ----Multivariate3, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE,  fig.show = "hold", out.width = "25%"----
-data <- ExampleData1[, -c(3, 23)]
-data_df <- dplyr::filter(data, Group != "ND" & Treatment != "Unstimulated")
-cyt_pca(
-  data_df,
-  pdf_title = NULL,
-  colors = c("black", "red2"),
-  scale = "log2",
-  comp_num = 2,
-  pch_values = c(16, 4),
-  group_col = "Group"
-)
-
-## ----EDA6, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE----------------
-# Generating Volcano Plot
-data_df <- ExampleData1[, -c(2:3)]
-cyt_volc(
-  data_df,
+volc_plots <- cyt_volc(
+  data_volc,
   group_col = "Group",
   cond1 = "T2D",
   cond2 = "ND",
   fold_change_thresh = 2.0,
-  top_labels = 15
+  p_value_thresh = 0.05,
+  top_labels = 15,
+  method = "ttest"
 )
 
-## ----EDA7, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE, fig.width=5, fig.height=4----
-# Generating Heat map
+# The function returns a named list of ggplot objects; print the comparison
+volc_plots[["T2D vs ND"]]
+
+## ----heatmap, fig.height=6----------------------------------------------------
 cyt_heatmap(
-  data = data_df,
-  scale = "log2", # Optional scaling
+  data = data_df[, -c(2:3)],
+  scale = "log2",
   annotation_col = "Group",
+  annotation_side = "auto",
+  show_row_names = FALSE,
   title = NULL
 )
 
-## ----EDA8, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE----------------
-# Generating dual flashlights plot
-data_df <- ExampleData1[, -c(2:3)]
-dfp <- cyt_dualflashplot(
-  data_df,
-  group_var = "Group",
-  group1 = "T2D",
-  group2 = "ND",
-  ssmd_thresh = -0.2,
-  log2fc_thresh = 1,
-  top_labels = 10
-)
-# Print the plot
-dfp
-# Print the table data used for plotting
-print(dfp$data, n = 25)
+## ----dualflash, fig.height=6, fig.width=7-------------------------------------
+data_dfp <- ExampleData1[, -c(2:3)]
 
-## ----ML1, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE-----------------
-# Using XGBoost for classification
-data_df0 <- ExampleData1
-data_df <- data.frame(data_df0[, 1:3], log2(data_df0[, -c(1:3)]))
-data_df <- data_df[, -c(2:3)]
-data_df <- dplyr::filter(data_df, Group != "ND")
+dfp <- cyt_dualflashplot(
+  data_dfp,
+  group_var    = "Group",
+  group1       = "T2D",
+  group2       = "ND",
+  ssmd_thresh  = 0.2,
+  log2fc_thresh = 1,
+  top_labels   = 10,
+  verbose      = FALSE
+)
+dfp
+
+## ----dualflash-table----------------------------------------------------------
+# Inspect the underlying statistics
+head(dfp$data[order(abs(dfp$data$ssmd), decreasing = TRUE), ], 10)
+
+## ----pca, fig.show='hide'-----------------------------------------------------
+data_pca <- ExampleData1[, -c(3, 23)]
+data_pca <- dplyr::filter(data_pca, Group != "ND" & Treatment != "Unstimulated")
+
+pca_results <- cyt_pca(
+  data_pca,
+  output_file  = NULL,
+  colors       = c("black", "red2"),
+  scale        = "log2",
+  comp_num     = 2,
+  pch_values   = c(16, 4),
+  group_col    = "Group",
+  ellipse      = TRUE
+)
+
+## ----pca-plots, fig.show="hold", fig.width=9, fig.height=5--------------------
+pca_results$overall_indiv_plot
+pca_results$scree_plot
+
+## ----pca-loadings, fig.show="hold", fig.width=9, fig.height=5-----------------
+pca_results$loadings$Comp1()
+pca_results$correlation_circle()
+
+## ----splsda, fig.show='hide'--------------------------------------------------
+data_spls <- ExampleData1[, -c(3)]
+data_spls <- dplyr::filter(data_spls, Group != "ND" & Treatment == "CD3/CD28")
+
+spls_results <- cyt_splsda(
+  data_spls,
+  output_file  = NULL,
+  colors       = c("black", "purple"),
+  scale        = "log2",
+  ellipse      = TRUE,
+  var_num      = 25,
+  cv_opt       = "loocv",
+  comp_num     = 2,
+  pch_values   = c(16, 4),
+  group_col    = "Group",
+  group_col2   = "Treatment",
+  roc          = FALSE,
+  verbose      = FALSE
+)
+
+## ----splsda-plots, fig.show="hold", fig.width=9, fig.height=5-----------------
+spls_results$overall_indiv_plot
+spls_results$vip_indiv_plot
+
+## ----splsda-loadings, fig.show="hold", fig.width=9, fig.height=5--------------
+spls_results$loadings$Comp1()
+spls_results$vip_scores$Comp1()
+
+## ----mint, fig.show='hide'----------------------------------------------------
+data_mint <- ExampleData5[, -c(2, 4)]
+data_mint <- dplyr::filter(data_mint, Group != "ND")
+
+mint_results <- cyt_mint_splsda(
+  data_mint,
+  group_col  = "Group",
+  batch_col  = "Batch",
+  colors     = c("black", "purple"),
+  ellipse    = TRUE,
+  var_num    = 25,
+  comp_num   = 2,
+  scale      = "log2",
+  verbose    = FALSE
+)
+
+## ----mint-plots, fig.show="hold", fig.width=9, fig.height=5-------------------
+mint_results$global_indiv_plot
+mint_results$partial_indiv_plot
+
+## ----mint-loadings, fig.show="hold", fig.width=9, fig.height=5----------------
+mint_results$global_loadings_plots$Comp1()
+
+## ----xgb, fig.height=5--------------------------------------------------------
+data_ml <- data.frame(ExampleData1[, 1:3], log2(ExampleData1[, -c(1:3)]))
+data_ml <- data_ml[, -c(2:3)]
+data_ml <- dplyr::filter(data_ml, Group != "ND")
 
 cyt_xgb(
-  data = data_df,
-  group_col = "Group",
-  nrounds = 500,
-  max_depth = 4,
-  min_split_loss = 0,
+  data          = data_ml,
+  group_col     = "Group",
+  nrounds       = 250,
+  max_depth     = 4,
   learning_rate = 0.05,
-  nfold = 5,
-  cv = TRUE,
-  objective = "multi:softprob",
-  eval_metric = "auc",
-  early_stopping_rounds = NULL,
+  nfold         = 5,
+  cv            = FALSE,
+  objective     = "multi:softprob",
+  eval_metric   = "mlogloss",
   top_n_features = 10,
-  verbose = 0,
-  plot_roc = TRUE,
-  print_results = FALSE
+  verbose       = 0,
+  plot_roc      = FALSE,
+  print_results = FALSE,
+  seed          = 123
 )
 
-## ----ML2, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE-----------------
-# Using Random Forest for classification
+## ----rf, fig.height=5---------------------------------------------------------
 cyt_rf(
-  data = data_df,
-  group_col = "Group",
-  k_folds = 5,
-  ntree = 1000,
-  mtry = 4,
-  run_rfcv = TRUE,
-  plot_roc = TRUE,
-  verbose = FALSE
+  data       = data_ml,
+  group_col  = "Group",
+  ntree      = 500,
+  mtry       = 4,
+  k_folds    = 5,
+  run_rfcv   = TRUE,
+  plot_roc   = FALSE,
+  verbose    = FALSE,
+  seed       = 123
 )
+
+## ----session-info-------------------------------------------------------------
+sessionInfo()
 
